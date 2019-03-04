@@ -1,0 +1,9 @@
+#set($response = $input.path('$'))
+
+{
+#if($response != "")
+"data": "$response"
+#else
+"error": "failed lookup on address"
+#end
+}

@@ -1,0 +1,7 @@
+#set($address = $input.params('address'))
+
+{
+  #if($address != "")
+    "address": "$address"
+  #end
+}
