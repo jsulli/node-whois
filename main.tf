@@ -3,6 +3,13 @@ provider "aws" {
 }
 
 
+data "archive_file" "lambda" {
+  source_file = "dist/bundle.js"
+  type = "zip"
+  output_path = "whois.zip"
+}
+
+
 resource "aws_lambda_function" "lambda-whois" {
   # The local file to use as the lambda function.  A popular alternative is to keep the lambda function
   # source code in an S3 bucket.
@@ -12,7 +19,7 @@ resource "aws_lambda_function" "lambda-whois" {
   function_name = "lambda-whois"
 
   # The entrypoint to the lambda function in the source code.  The format is <file-name>.<property-name>
-  handler = "app.handler"
+  handler = "bundle.handler"
 
   # IAM (Identity and Access Management) policy for the lambda function.
   role = "${aws_iam_role.lambda-role.arn}"

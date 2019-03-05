@@ -2,7 +2,6 @@
 const whois = require('whois')
 
 exports.handler = (event, context, callback) => {
-
     lookupAddress(event.address, response => {
         callback(null, response)
     })
