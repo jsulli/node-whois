@@ -1,4 +1,4 @@
-import {lookupAddress, processData} from "../app"
+import { lookupAddress, processData } from "../app"
 
 
 describe('get address results ', () => {

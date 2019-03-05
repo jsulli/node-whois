@@ -11,24 +11,22 @@ data "archive_file" "lambda" {
 
 
 resource "aws_lambda_function" "lambda-whois" {
-  # The local file to use as the lambda function.  A popular alternative is to keep the lambda function
-  # source code in an S3 bucket.
+  # The local file to upload to lambda
   filename = "whois.zip"
 
-  # A unique name to give the lambda function.
+  # Lambda function name
   function_name = "lambda-whois"
 
   # The entrypoint to the lambda function in the source code.  The format is <file-name>.<property-name>
   handler = "bundle.handler"
 
-  # IAM (Identity and Access Management) policy for the lambda function.
+  # IAM policy for the lambda function.
   role = "${aws_iam_role.lambda-role.arn}"
 
-  # Use Node.js for this lambda function.
+  # Set runtime for lambda function
   runtime = "nodejs8.10"
 
-  # The source code hash is used by Terraform to detect whether the source code of the lambda function
-  # has changed.  If it changed, Terraform will re-upload the lambda function.
+  # Check the hash on the zip file to see if it has changed. If it changed, Terraform will re-upload the zip to lambda
   source_code_hash = "${base64sha256(file("whois.zip"))}"
 }
 
@@ -66,7 +64,7 @@ resource "aws_api_gateway_rest_api" "whois-api" {
   name = "whoisAPI"
 
   # An optional description of the REST API
-  description = "A Prototype REST API for getting information on a web address"
+  description = "A REST API for getting information on a web address"
 }
 
 # Create an API Gateway resource, which is a certain path inside the REST API
@@ -124,7 +122,7 @@ resource "aws_api_gateway_integration" "lambda-api-integration" {
   }
 }
 
-
+# Set CORS access parameters on the gateway
 module "cors" {
   source = "github.com/squidfunk/terraform-aws-api-gateway-enable-cors"
   version = "0.2.0"
